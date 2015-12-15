@@ -19,38 +19,28 @@
 *****************************************************************************/
 
 static void print_list(const List *list) {
+	ListElmt           *element;
+	int                *data, i;
+	/*****************************************************************************
+	*                                                                            *
+	*  Display the linked list.                                                  *
+	*                                                                            *
+	*****************************************************************************/
+	fprintf(stdout, "List size is %d\n", list_size(list));
 
-ListElmt           *element;
+	i = 0;
+	element = list_head(list);
 
-int                *data,
-                   i;
-
-/*****************************************************************************
-*                                                                            *
-*  Display the linked list.                                                  *
-*                                                                            *
-*****************************************************************************/
-
-fprintf(stdout, "List size is %d\n", list_size(list));
-
-i = 0;
-element = list_head(list);
-
-while (1) {
-
-   data = list_data(element);
-   fprintf(stdout, "list[%03d]=%03d\n", i, *data);
-
-   i++;
-
-   if (list_is_tail(element))
-      break;
-   else
-      element = list_next(element);
-
-}
-
-return;
+	while (1) {
+	   data = list_data(element);
+	   fprintf(stdout, "list[%03d]=%03d\n", i, *data);
+	   i++;
+	   if (list_is_tail(element))
+		  break;
+	   else
+		  element = list_next(element);
+	}
+	return;
 
 }
 
@@ -60,118 +50,113 @@ return;
 *                                                                            *
 *****************************************************************************/
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) 
+{
 
-List               list;
-ListElmt           *element;
+	List               list;
+	ListElmt           *element;
+	int                *data, i;
+	/*****************************************************************************
+	*                                                                            *
+	*  Initialize the linked list.                                               *
+	*                                                                            *
+	*****************************************************************************/
+	list_init(&list, free);
+	/*****************************************************************************
+	*                                                                            *
+	*  Perform some linked list operations.                                      *
+	*                                                                            *
+	*****************************************************************************/
+	element = list_head(&list);
 
-int                *data,
-                   i;
+	for (i = 10; i > 0; i--) {
 
-/*****************************************************************************
-*                                                                            *
-*  Initialize the linked list.                                               *
-*                                                                            *
-*****************************************************************************/
+	   if ((data = (int *)malloc(sizeof(int))) == NULL)
+		  return 1;
 
-list_init(&list, free);
+	   *data = i;
 
-/*****************************************************************************
-*                                                                            *
-*  Perform some linked list operations.                                      *
-*                                                                            *
-*****************************************************************************/
+	   if (list_ins_next(&list, NULL, data) != 0)
+		  return 1;
 
-element = list_head(&list);
+	}
 
-for (i = 10; i > 0; i--) {
+	print_list(&list);
 
-   if ((data = (int *)malloc(sizeof(int))) == NULL)
-      return 1;
+	element = list_head(&list);
 
-   *data = i;
+	for (i = 0; i < 7; i++)
+	   element = list_next(element);
 
-   if (list_ins_next(&list, NULL, data) != 0)
-      return 1;
+	data = list_data(element);
+	fprintf(stdout, "Removing an element after the one containing %03d\n", *data);
 
-}
+	if (list_rem_next(&list, element, (void **)&data) != 0)
+	   return 1;
 
-print_list(&list);
+	print_list(&list);
 
-element = list_head(&list);
+	fprintf(stdout, "Inserting 011 at the tail of the list\n");
 
-for (i = 0; i < 7; i++)
-   element = list_next(element);
+	*data = 11;
+	if (list_ins_next(&list, list_tail(&list), data) != 0)
+	   return 1;
 
-data = list_data(element);
-fprintf(stdout, "Removing an element after the one containing %03d\n", *data);
+	print_list(&list);
 
-if (list_rem_next(&list, element, (void **)&data) != 0)
-   return 1;
+	fprintf(stdout, "Removing an element after the first element\n");
 
-print_list(&list);
+	element = list_head(&list);
+	if (list_rem_next(&list, element, (void **)&data) != 0)
+	   return 1;
 
-fprintf(stdout, "Inserting 011 at the tail of the list\n");
+	print_list(&list);
 
-*data = 11;
-if (list_ins_next(&list, list_tail(&list), data) != 0)
-   return 1;
+	fprintf(stdout, "Inserting 012 at the head of the list\n");
 
-print_list(&list);
+	*data = 12;
+	if (list_ins_next(&list, NULL, data) != 0)
+	   return 1;
 
-fprintf(stdout, "Removing an element after the first element\n");
+	print_list(&list);
 
-element = list_head(&list);
-if (list_rem_next(&list, element, (void **)&data) != 0)
-   return 1;
+	fprintf(stdout, "Iterating and removing the fourth element\n");
 
-print_list(&list);
+	element = list_head(&list);
+	element = list_next(element);
+	element = list_next(element);
 
-fprintf(stdout, "Inserting 012 at the head of the list\n");
+	if (list_rem_next(&list, element, (void **)&data) != 0)
+	   return 1;
 
-*data = 12;
-if (list_ins_next(&list, NULL, data) != 0)
-   return 1;
+	print_list(&list);
 
-print_list(&list);
+	fprintf(stdout, "Inserting 013 after the first element\n");
 
-fprintf(stdout, "Iterating and removing the fourth element\n");
+	*data = 13;
+	if (list_ins_next(&list, list_head(&list), data) != 0)
+	   return 1;
 
-element = list_head(&list);
-element = list_next(element);
-element = list_next(element);
+	print_list(&list);
 
-if (list_rem_next(&list, element, (void **)&data) != 0)
-   return 1;
+	i = list_is_head(&list, list_head(&list));
+	fprintf(stdout, "Testing list_is_head...Value=%d (1=OK)\n", i);
+	i = list_is_head(&list, list_tail(&list));
+	fprintf(stdout, "Testing list_is_head...Value=%d (0=OK)\n", i);
+	i = list_is_tail(list_tail(&list));
+	fprintf(stdout, "Testing list_is_tail...Value=%d (1=OK)\n", i);
+	i = list_is_tail(list_head(&list));
+	fprintf(stdout, "Testing list_is_tail...Value=%d (0=OK)\n", i);
 
-print_list(&list);
+	/*****************************************************************************
+	*                                                                            *
+	*  Destroy the linked list.                                                  *
+	*                                                                            *
+	*****************************************************************************/
 
-fprintf(stdout, "Inserting 013 after the first element\n");
+	fprintf(stdout, "Destroying the list\n");
+	list_destroy(&list);
 
-*data = 13;
-if (list_ins_next(&list, list_head(&list), data) != 0)
-   return 1;
-
-print_list(&list);
-
-i = list_is_head(&list, list_head(&list));
-fprintf(stdout, "Testing list_is_head...Value=%d (1=OK)\n", i);
-i = list_is_head(&list, list_tail(&list));
-fprintf(stdout, "Testing list_is_head...Value=%d (0=OK)\n", i);
-i = list_is_tail(list_tail(&list));
-fprintf(stdout, "Testing list_is_tail...Value=%d (1=OK)\n", i);
-i = list_is_tail(list_head(&list));
-fprintf(stdout, "Testing list_is_tail...Value=%d (0=OK)\n", i);
-
-/*****************************************************************************
-*                                                                            *
-*  Destroy the linked list.                                                  *
-*                                                                            *
-*****************************************************************************/
-
-fprintf(stdout, "Destroying the list\n");
-list_destroy(&list);
-
-return 0;
+	return 0;
 
 }
