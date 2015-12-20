@@ -1,0 +1,8 @@
+echo 1 | sudo tee /proc/sys/kernel/randomize_va_space
+gcc -g -fno-stack-protector -m32 vulnerable.c
+gdb ./a.out
+b 16
+r $(cat gen.txt)
+info registers
+x/40x 
+c
