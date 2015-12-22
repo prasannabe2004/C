@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 //0x0804847d address for this function
+//0xffffda23: for shell
 void function()
 {
 	printf("hacked\n");
