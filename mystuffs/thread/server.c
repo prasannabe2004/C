@@ -56,12 +56,33 @@ int AcceptClientConnections(int socket, struct sockaddr_in* client)
 	return client_sock;
 } 
 
+void HandleClientConnection(int client_sock)
+{
+	int read_size = 0;
+    char client_message[2000];
+	char server_reply[128] = "SERVER ACK";
 
+	while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
+    {
+    	int value = atoi(client_message)+100; 
+        //Send the message back to client by incrementing 100
+		sprintf(server_reply,"%d",value);
+        write(client_sock , &server_reply , strlen(server_reply));
+    }
+    if(read_size == 0)
+    {
+        puts("Client disconnected");
+        fflush(stdout);
+    }
+    else if(read_size == -1)
+    {
+        perror("recv failed");
+    }
+}
 int main(int argc , char *argv[])
 {
-    int socket_desc , client_sock, c , read_size;
+    int socket_desc , client_sock, c;
     struct sockaddr_in server , client;
-    char client_message[2000];
      
 	socket_desc = CreateServerSocket(&server);
     
@@ -69,22 +90,7 @@ int main(int argc , char *argv[])
 	{ 
 		client_sock = AcceptClientConnections(socket_desc,&server);    
     	//Receive a message from client
-    	while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
-    	{
-        	//Send the message back to client
-        	write(client_sock , client_message , strlen(client_message));
-    	}
-     
-    	if(read_size == 0)
-    	{
-        	puts("Client disconnected");
-        	fflush(stdout);
-    	}
-    	else if(read_size == -1)
-    	{
-        	perror("recv failed");
-    	}
-     
+ 		HandleClientConnection(client_sock);   	
 	}
     return 0;
 }
