@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1454559024 source:/home/prasanna/github/C/mystuffs/bitfields/main.c
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+

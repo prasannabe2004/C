@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #define SRCFILENAME "C:/Users/pmohanasundaram/Documents/GitHub/C/mystuffs/removeBlanks/sam.txt"
 #define DSTFILENAME "C:/Users/pmohanasundaram/Documents/GitHub/C/mystuffs/removeBlanks/sam1.txt"
 
-void removeBlanks(const char* srcFilename,const char* dstFilename)
+uint32_t removeBlanks(const char* srcFilename,const char* dstFilename)
 {
     char buffer;
     FILE* src;

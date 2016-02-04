@@ -4,3 +4,9 @@
 	<stdlib.h>
 	<string.h>
 
+1454557975 source:/home/prasanna/github/C/mystuffs/removeBlanks/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdint.h>
+
