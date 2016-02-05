@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <syslog.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 int main(int argc,char** argv)
 {
@@ -32,7 +34,7 @@ int main(int argc,char** argv)
 			printf("Parent PID is %d\n",getpid());
 			exit(EXIT_SUCCESS);
 	}
-	
+
 	while(1)
 	{
 		syslog(LOG_INFO, "PID = %d\n",getpid());
