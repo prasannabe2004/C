@@ -1,7 +1,9 @@
+  #include <stdio.h>
   int main()
   {
-      int* p;
-      p = (int*)malloc(sizeof(int));
-      *p = 10;
+      char dummy[80];
+      printf("Enter a string:\n");
+      scanf("%[^a]",dummy);
+      printf("%s\n",dummy);
       return 0;
   }

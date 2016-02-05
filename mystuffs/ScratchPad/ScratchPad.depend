@@ -1,3 +1,7 @@
 # depslib dependency file v1.0
 1454645374 source:/home/prasanna/github/C/mystuffs/ScratchPad/main.c
 
+1454647289 source:c:\users\pmohanasundaram\documents\github\c\mystuffs\scratchpad\main.c
+	<stdio.h>
+	<stdlib.h>
+
