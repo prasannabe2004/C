@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-int main()
-{
-    printf("Hello world!\n");
-    return 0;
-}
+  int main()
+  {
+      int* p;
+      p = (int*)malloc(sizeof(int));
+      *p = 10;
+      return 0;
+  }
