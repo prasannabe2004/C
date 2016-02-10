@@ -1,43 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <syslog.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <fcntl.h>
-#include <sys/time.h>
-#include <sys/wait.h>
-#include <signal.h>
-
-typedef struct SquidMsgQueue
-{
-    struct SquidMsgQueue *pNext;
-    struct SquidMsgQueue *pPrev;
-    char logBuffer [BUFSIZ + 1];
-    int32_t receiveSize;
-} tSquidMsgQueue;
+#include "list.h"
 
 tSquidMsgQueue *gMsgQHead = NULL;
 tSquidMsgQueue *gMsgQTail = NULL;
 pthread_mutex_t msgQueueProtect;
 pthread_cond_t msgQueueWait;
 pthread_t gWorkerThreadId;
-
-
-#define D_BUFFER_SIZE 127
-#define D_DEFAULT_SQUID_LOG "/var/logs/access.log"
-#define D_SM_RAW_DATA "/tmp/sm_raw.data"
-
-#define D_FILE_NAME_SIZE 255
-
-#define M_FREEZ(x) {\
-	free (x);\
-	x=NULL;\
-}
+char i8FileInPath [D_FILE_NAME_SIZE + 1] = {0};
+char i8FileOutPath [D_FILE_NAME_SIZE + 1] = {0};
 
 static int32_t smInitMsgQueue (void)
 {
@@ -95,7 +64,7 @@ static int32_t smFinitMsgQueue (void)
 static int32_t smMsgEnqueue (const char *pLogMsg, int32_t receiveSize)
 {
 	tSquidMsgQueue *pNewNode = NULL;
-
+    syslog(LOG_WARNING, "Queuing %s of size %d\n",pLogMsg, receiveSize);
 	pNewNode = (tSquidMsgQueue *) malloc (sizeof (tSquidMsgQueue));
 
 	if (NULL == pNewNode)
@@ -156,7 +125,7 @@ static void* smWorkerThread (void *pArg)
     tSquidMsgQueue* pMsg = NULL;
     int32_t i32SurgeFile = -1;
 
-    i32SurgeFile = open (D_SM_RAW_DATA, O_WRONLY|O_CREAT|O_DSYNC);
+    i32SurgeFile = open (i8FileOutPath, O_WRONLY|O_CREAT|O_DSYNC);
 
     if (-1 == i32SurgeFile)
     {
@@ -172,6 +141,7 @@ static void* smWorkerThread (void *pArg)
         {
             pMsgBuffer = pMsg->logBuffer;
             receiveSize = pMsg->receiveSize;
+            syslog(LOG_WARNING, "Dequeuing %s of size %d\n",pMsgBuffer, receiveSize);
         }
         else
         {
@@ -183,7 +153,7 @@ static void* smWorkerThread (void *pArg)
             continue;
         }
 
-	printBuffer (i32SurgeFile, pMsgBuffer, receiveSize);
+        printBuffer (i32SurgeFile, pMsgBuffer, receiveSize);
 
         M_FREEZ(pMsg);
     }
@@ -219,9 +189,6 @@ void cleanUpProcess (int32_t sigNo)
 	exit (EXIT_SUCCESS);
 }
 
-
-
-
 int32_t initialize (void)
 {
 	int32_t retVal = -1;
@@ -248,27 +215,10 @@ int32_t initialize (void)
 
 }
 
-#define D_MY_PID_FILE "/var/run/sm_for_squid.pid"
-
-int main (int argc, char **argv)
+void daemonize()
 {
-	char i8FilePath [D_FILE_NAME_SIZE + 1] = {0};
-	char i8ReadBuf [BUFSIZ + 1] = {0};
-	int32_t i32FileDes = -1;
-	int32_t i32Current = -1;
-	int32_t i32BytesRead = 0;
-	int32_t i32MyPid = -1;
-	FILE *FP = NULL;
-
-	if (argc < 2)
-	{
-		syslog (LOG_WARNING, "File path not provided. Using defaults '%s'", D_DEFAULT_SQUID_LOG);
-		strncpy (i8FilePath, D_DEFAULT_SQUID_LOG, D_FILE_NAME_SIZE);
-	}
-	else
-	{
-		strncpy (i8FilePath, argv[1], D_FILE_NAME_SIZE);
-	}
+    FILE* FP;
+    int i32MyPid = -1;
 
 	FP = fopen (D_MY_PID_FILE, "r");
 
@@ -288,49 +238,87 @@ int main (int argc, char **argv)
 
 		fclose (FP);
 	}
+    i32MyPid = fork();
 
-	i32MyPid = fork ();
-
-	switch (i32MyPid)
+	switch(i32MyPid)
 	{
-		case -1:
-			syslog (LOG_CRIT, "Unable to daemonize. Exiting...: %s", strerror (errno));
-			exit (EXIT_FAILURE);
-			// Break after exit... he he.. .in the name of BEST coding practice... ergh!
-			break;
 		case 0:
-			syslog (LOG_WARNING, "Hurrah! Child '%d' created", (int32_t)getpid());
-			if (-1 == setsid())
+			/* Child */
+			printf("Child PID is %d\n",getpid());
+			umask(0);
+			if(-1 == setsid())
 			{
-				syslog (LOG_CRIT, "Failed to set session ID. Exiting...: %s", strerror (errno));
-				exit (EXIT_FAILURE);
+				perror("setsid:");
+				exit(EXIT_FAILURE);
 			}
+			close(STDIN_FILENO);
+			close(STDOUT_FILENO);
+			close(STDERR_FILENO);
 			break;
+		case -1:
+			/* Failure */
+			perror("Fork:");
+			exit(EXIT_FAILURE);
 		default:
-			FP = fopen (D_MY_PID_FILE, "w");
-
-			if (FP)
-			{
-				fprintf (FP, "%d", i32MyPid);
-				fclose (FP);
-			}
-			else
-			{
-				syslog (LOG_WARNING, "Unable to create PID file: %s", strerror (errno));
-			}
-
-			return 0;
+			/* Parent */
+			printf("Parent PID is %d\n",getpid());
+			exit(EXIT_SUCCESS);
 	}
+
+}
+
+int main (int argc, char **argv)
+{
+
+	char i8ReadBuf [BUFSIZ + 1] = {0};
+	int32_t i32FileDes = -1;
+	int32_t i32Current = -1;
+	int32_t i32BytesRead = 0;
+
+	int c = 0, nodaemonize = 0, inFile = -1, outFile = -1;
+	extern char *optarg;
+
+	while (-1 != (c = getopt (argc, argv, "i:o:fh")))
+	{
+		switch (c)
+		{
+			case 'i':
+				printf("Option '%c' selected with argument %s\n",c,optarg);
+				inFile = 1;
+				strncpy (i8FileInPath, optarg, D_FILE_NAME_SIZE);
+				break;
+			case 'o':
+				printf("Option '%c' selected with argument %s\n",c,optarg);
+				outFile = 1;
+				strncpy (i8FileOutPath, optarg, D_FILE_NAME_SIZE);
+				break;
+			case 'f':
+				printf("Option '%c' selected with argument %s\n",c,optarg);
+				nodaemonize = 1;
+				break;
+			default:
+			case 'h':
+				//print_usage (argv[0]);
+				exit (EXIT_SUCCESS);
+				break;
+		}
+	}
+	if(!nodaemonize)
+        daemonize();
+    if(inFile)
+        strncpy (i8FileInPath, D_DEFAULT_SQUID_LOG, D_FILE_NAME_SIZE);
+    if(outFile)
+        strncpy (i8FileOutPath, D_SM_RAW_DATA, D_FILE_NAME_SIZE);
 
 	signal (SIGINT, cleanUpProcess);
 	signal (SIGTERM, cleanUpProcess);
 	signal (SIGUSR1, cleanUpProcess);
 
-	i32FileDes = open (i8FilePath, O_RDONLY);
+	i32FileDes = open (i8FileInPath, O_RDONLY);
 
 	if (-1 == i32FileDes)
 	{
-		syslog (LOG_CRIT, "Unable to open file '%s'. Exiting %s...\n", i8FilePath, argv[0]);
+		syslog (LOG_CRIT, "Unable to open file '%s'. Exiting %s...\n", i8FileInPath, argv[0]);
 		exit (EXIT_FAILURE);
 	}
 
