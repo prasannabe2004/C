@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1455153771 source:/home/prasanna/github/C/mystuffs/process/threadExit/main.c
+	<stdio.h>
+	<stdlib.h>
+	<pthread.h>
+

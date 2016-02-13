@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1455153586 source:/home/prasanna/github/C/mystuffs/process/threadJoin/main.c
+	<stdio.h>
+	<pthread.h>
+

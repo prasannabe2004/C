@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1455158811 source:/home/prasanna/github/C/mystuffs/process/mutexVsSpinlock/main.cpp
+	<stdio.h>
+	<pthread.h>
+	<unistd.h>
+	<sys/syscall.h>
+	<errno.h>
+	<sys/time.h>
+	<list>
+

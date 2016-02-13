@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1455153261 source:/home/prasanna/github/C/mystuffs/process/thread/main.c
+	<stdio.h>
+	<unistd.h>
+	<pthread.h>
+

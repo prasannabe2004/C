@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1455224804 source:/home/prasanna/github/C/mystuffs/ipc/zeromq/zeroMqServer/main.c
+	<string.h>
+	<stdio.h>
+	<unistd.h>
+	"zmq.h"
+

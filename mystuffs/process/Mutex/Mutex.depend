@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1455147655 source:/home/prasanna/github/C/mystuffs/process/Mutex/main.c
+	<stdio.h>
+	<pthread.h>
+

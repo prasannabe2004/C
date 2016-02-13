@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1455154792 source:/home/prasanna/github/C/mystuffs/process/threadSignalWait/main.c
+	<stdio.h>
+	<pthread.h>
+	<unistd.h>
+
