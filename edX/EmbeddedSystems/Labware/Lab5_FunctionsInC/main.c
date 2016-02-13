@@ -43,12 +43,9 @@ int main (void) {
 //    the length is greater than 20 or  
 //    the width is greater than 20. 
 unsigned long Calc_Area(unsigned long l, unsigned long w) {
-  unsigned long result = 0;
+  unsigned long result;
 
 // Put your Lab 5 code here
-	printf("I am starting\n");
   
-	if((l >= 3 && w >= 3) && (l <= 20 && w <=20))
-		result = l * w;
   return(result);
 }

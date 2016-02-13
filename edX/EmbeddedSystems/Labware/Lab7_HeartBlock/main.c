@@ -57,23 +57,14 @@ int main(void){
   EnableInterrupts();                      // enable interrupts for the grader  
   while(1){          // Follows the nine steps list above
     // a) Ready signal goes high
-		SetReady();
     // b) wait for switch to be pressed
-		WaitForASLow();
     // c) Ready signal goes low
-		ClearReady();
     // d) wait 10ms
-		Delay1ms(10);
     // e) wait for switch to be released
-		WaitForASHigh();
     // f) wait 250ms
-		Delay1ms(250);
     // g) VT signal goes high
-		SetVT();
     // h) wait 250ms
-		Delay1ms(250);
     // i) VT signal goes low
-		ClearVT();
   }
 }
 // Subroutine to initialize port F pins for input and output
@@ -109,35 +100,15 @@ void PortF_Init(void){ volatile unsigned long delay;
 // Outputs: None
 void WaitForASLow(void){
 // write this function
-	unsigned long AS;
-	while(1)
-	{
-		//AS = GPIO_PORTF_DATA_R&0x10;
-		//if(AS == 0)
-		if(GPIO_PORTF_DATA_R==0x09)
-		{
-			break;
-		}
-	}
 }
 
-// Subroutine reads AS input and waits for signal to be high
-// If AS is already high, it returns right away
-// If AS is currently low, it will wait until it to go high
+// Subroutine reads AS input and waits for signal to be low
+// If AS is already low, it returns right away
+// If AS is currently high, it will wait until it to go low
 // Inputs:  None
 // Outputs: None
 void WaitForASHigh(void){
 // write this function
-	unsigned long AS;
-	while(1)
-	{
-		//AS = GPIO_PORTF_DATA_R&0x10;
-		//if(AS == 0)
-		if(GPIO_PORTF_DATA_R==0x11)
-		{
-			break;
-		}
-	}
 }
 
 // Subroutine sets VT high
@@ -146,7 +117,6 @@ void WaitForASHigh(void){
 // Notes:   friendly means it does not affect other bits in the port
 void SetVT(void){
 // write this function
-	GPIO_PORTF_DATA_R|=0x02;
 }
 
 // Subroutine clears VT low
@@ -155,7 +125,6 @@ void SetVT(void){
 // Notes:   friendly means it does not affect other bits in the port
 void ClearVT(void){
 // write this function
-	GPIO_PORTF_DATA_R&=~0x02;
 }
 
 // Subroutine sets Ready high
@@ -164,7 +133,6 @@ void ClearVT(void){
 // Notes:   friendly means it does not affect other bits in the port
 void SetReady(void){
 // write this function
-	GPIO_PORTF_DATA_R|=0x08;
 }
 
 
@@ -174,23 +142,14 @@ void SetReady(void){
 // Notes:   friendly means it does not affect other bits in the port
 void ClearReady(void){
 // write this function
-	GPIO_PORTF_DATA_R&=0xF7;
 }
 
 // Subroutine to delay in units of milliseconds
 // Inputs:  Number of milliseconds to delay
 // Outputs: None
 // Notes:   assumes 80 MHz clock
-void Delay1ms(unsigned long time){
-  unsigned long i;
-  while(time > 0){
-    //i = 13333;  // this number means 100ms for simulator
-		i = (50000);  // this number means 100ms
-    while(i > 0){
-      i = i - 1;
-    }
-    time = time - 1; // decrements every 100 ms
-  }
+void Delay1ms(unsigned long msec){
+// write this function
 
 }
 
