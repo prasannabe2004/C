@@ -49,6 +49,7 @@ void EnableInterrupts(void);
 // 3. Subroutines Section
 // MAIN: Mandatory for a C Program to be executable
 int main(void){    
+	unsigned int ch = 0;
   TExaS_Init(SW_PIN_PF40,LED_PIN_PF321); 
   // TExaS_Init initializes the real board grader for lab 4
   PortF_Init();        // Call initialization of port PF4, PF3, PF2, PF1, PF0    
@@ -56,19 +57,22 @@ int main(void){
   while(1){
     SW1 = GPIO_PORTF_DATA_R&0x10;     // read PF4 into SW1
     SW2 = GPIO_PORTF_DATA_R&0x01;     // read PF0 into SW2
-    if(!(SW1)&&!(SW2)){                     // both pressed
-      GPIO_PORTF_DATA_R = 0x04;       // LED is blue
-    } else{                           
-      if(!(SW1)&&SW2){                // just SW1 pressed
-        GPIO_PORTF_DATA_R = 0x02;     // LED is red
-      } else{                        
-        if((SW1)&&!(SW2)){              // just SW2 pressed
-          GPIO_PORTF_DATA_R = 0x08;   // LED is green
-        }else{                        // neither switch
-          GPIO_PORTF_DATA_R = 0x00;   // LED is off
-        }
-      }
-    }
+		ch = SW1|SW2;
+		switch(ch)
+		{
+			case 17:
+				GPIO_PORTF_DATA_R = 0x00;
+				break;
+			case 1:
+				GPIO_PORTF_DATA_R = 0x02;
+				break;
+			case 16:
+				GPIO_PORTF_DATA_R = 0x08;
+				break;
+			case 0:
+				GPIO_PORTF_DATA_R = 0x04;
+				break;
+		}
   }
 }
 // Subroutine to initialize port F pins for input and output
