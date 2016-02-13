@@ -57,10 +57,10 @@ int main(void){
     if(In == 0x00){              // zero means SW1 is pressed
       GPIO_PORTF_DATA_R = 0x08;  // LED is green
     } else{                      // 0x10 means SW1 is not pressed
-      GPIO_PORTF_DATA_R = 0x0E;  // LED is red
+      GPIO_PORTF_DATA_R = 0x02;  // LED is red
     }
     Delay();                     // wait 0.1 sec
-    GPIO_PORTF_DATA_R = 0x06;    // LED is blue
+    GPIO_PORTF_DATA_R = 0x04;    // LED is blue
     Delay();                     // wait 0.1 sec
   }
 }
