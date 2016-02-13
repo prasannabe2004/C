@@ -22,16 +22,20 @@ void EnableInterrupts(void);  // Enable interrupts
 // ***** 3. Subroutines Section *****
 int main (void) {
   unsigned long length, width, area;
-  TExaS_Init(UART_PIN_PA0,UART_PIN_PA1); // this initializes the TExaS grader lab 5
+	TExaS_Init(UART_PIN_PA0,UART_PIN_PA1); // this initializes the TExaS grader lab 5
   UART_Init();    // initialize UART for printing
   printf("\nThis program calculates areas of rectangular rooms.\n");
   EnableInterrupts();  // the grader needs interrupts
-  while(1) {
-    printf("\nGive length: "); scanf("%ld", &length);  // Get input
-    printf("\nGive width: ");  scanf("%ld", &width);   // Get input
+	
+  while(1){
+		printf("\nGive length: "); 
+		scanf("%ld", &length);  // Get input
+    printf("\nGive width: ");  
+		scanf("%ld", &width);   // Get input
     area = Calc_Area(length, width);
     printf("\nArea of the room = %ld\n",  area);
   }
+	return 0;
 }
 
 // Computes the Area of a rectangular room whose sides are given
@@ -46,6 +50,9 @@ unsigned long Calc_Area(unsigned long l, unsigned long w) {
   unsigned long result;
 
 // Put your Lab 5 code here
-  
+	if(((l >= 3 && l <= 20) && (w >= 3 && w <= 20)))
+		result = l * w;
+	else
+		result = 0;
   return(result);
 }
