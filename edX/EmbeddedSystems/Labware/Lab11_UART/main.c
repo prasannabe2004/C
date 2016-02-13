@@ -1,7 +1,7 @@
 // main.c
 // Runs on LM4F120/TM4C123
 // Test main for Lab 11
-// December 29, 2014
+// January 15, 2016
 
 // this connection occurs in the USB debugging cable
 // U0Rx (PA0) connected to serial port on PC

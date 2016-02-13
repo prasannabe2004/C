@@ -6,7 +6,7 @@
 //     June 17, 2013
 // Lab 5
 //      Jon Valvano and Ramesh Yerraballi
-//      November 21, 2013
+//      January 15, 2016
 
 // ***** 1. Pre-processor Directives Section *****
 #include <stdio.h>   // standard C library 

@@ -6,13 +6,13 @@
 // The foreground thread takes the result from the mailbox,
 // converts the result to a string, and prints it to the
 // Nokia5110 LCD.  The display is optional.
-// December 29, 2014
+// January 15, 2016
 
 /* This example accompanies the book
    "Embedded Systems: Introduction to ARM Cortex M Microcontrollers",
-   ISBN: 978-1469998749, Jonathan Valvano, copyright (c) 2014
+   ISBN: 978-1469998749, Jonathan Valvano, copyright (c) 2015
 
- Copyright 2015 by Jonathan W. Valvano, valvano@mail.utexas.edu
+ Copyright 2016 by Jonathan W. Valvano, valvano@mail.utexas.edu
     You may use, edit, run or distribute this file
     as long as the above copyright notice remains
  THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED

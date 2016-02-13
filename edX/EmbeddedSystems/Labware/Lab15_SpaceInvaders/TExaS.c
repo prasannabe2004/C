@@ -9,13 +9,13 @@
 // There is a Timer5A interrupt after the buffer has been transferred.
 // This example runs continuously, inputting to the buffer over and over.
 // Jonathan Valvano. Daniel Valvano
-// December 28, 2014
+// January 15, 2016
 
 /* This example accompanies the book
-   "Embedded Systems: Introduction to ARM Cortex M Microcontrollers"
-   ISBN: 978-1469998749, Jonathan Valvano, copyright (c) 2014
+   "Embedded Systems: Introduction to ARM Cortex M Microcontrollers",
+   ISBN: 978-1469998749, Jonathan Valvano, copyright (c) 2015
 
- Copyright 2015 by Jonathan W. Valvano, valvano@mail.utexas.edu
+ Copyright 2016 by Jonathan W. Valvano, valvano@mail.utexas.edu
     You may use, edit, run or distribute this file
     as long as the above copyright notice remains
  THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
@@ -254,7 +254,7 @@ unsigned long ScopeCount; // one buffer is 512 points
 void TExaS_Init(enum DisplayType display){volatile unsigned long delay;
   PLL_Init();     // ADC needs PLL on to run, 80 MHz
   SYSCTL_RCGCTIMER_R |= 0x20;      // 0) activate timer5
-  SetCourse("UT.6.02x");
+  SetCourse("UT.6.03x");
   OUT(ActionMsg,IntroMsg);
   OUT(IntroMsg,BlankMsg);
   OUT(OKMsg,BlankMsg);

@@ -5,7 +5,7 @@
 // turn the LED on when the button is released.  
 // This lab will use the hardware already built into the LaunchPad.
 // Daniel Valvano, Jonathan Valvano
-// January 8, 2014
+// January 15, 2016
 
 // built-in connection: PF0 connected to negative logic momentary switch, SW2
 // built-in connection: PF1 connected to red LED

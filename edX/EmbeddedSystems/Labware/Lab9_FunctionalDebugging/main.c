@@ -3,7 +3,7 @@
 // Runs on LM4F120/TM4C123
 // In this lab we are learning functional debugging by dumping
 //   recorded I/O data into a buffer
-// February 21, 2014
+// January 15, 2016
 
 // Lab 9
 //      Jon Valvano and Ramesh Yerraballi

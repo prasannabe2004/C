@@ -3,7 +3,7 @@
 // Runs on LM4F120/TM4C123
 // Index implementation of a Moore finite state machine to operate a traffic light.  
 // Daniel Valvano, Jonathan Valvano
-// December 29, 2014
+// January 15, 2016
 
 // east/west red light connected to PB5
 // east/west yellow light connected to PB4
@@ -30,7 +30,7 @@ void EnableInterrupts(void);  // Enable interrupts
 // ***** 3. Subroutines Section *****
 
 int main(void){ 
-  TExaS_Init(SW_PIN_PE210, LED_PIN_PB543210); // activate grader and set system clock to 80 MHz
+  TExaS_Init(SW_PIN_PE210, LED_PIN_PB543210,ScopeOff); // activate grader and set system clock to 80 MHz
  
   
   EnableInterrupts();

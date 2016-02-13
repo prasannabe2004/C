@@ -18,7 +18,7 @@
 // 8) clear VT low 
 // 9) set Ready high
 
-// Date: January 7, 2015
+// Date: January 15, 2016
 
 // 1. Pre-processor Directives Section
 #include "TExaS.h"
@@ -102,9 +102,9 @@ void WaitForASLow(void){
 // write this function
 }
 
-// Subroutine reads AS input and waits for signal to be low
-// If AS is already low, it returns right away
-// If AS is currently high, it will wait until it to go low
+// Subroutine reads AS input and waits for signal to be high
+// If AS is already high, it returns right away
+// If AS is currently low, it will wait until it to go high
 // Inputs:  None
 // Outputs: None
 void WaitForASHigh(void){

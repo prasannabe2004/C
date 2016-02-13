@@ -5,7 +5,7 @@
 // while a button is pressed and turn the LED on when the
 // button is released.  This lab requires external hardware
 // to be wired to the LaunchPad using the prototyping board.
-// December 28, 2014
+// January 15, 2016
 //      Jon Valvano and Ramesh Yerraballi
 
 // ***** 1. Pre-processor Directives Section *****
@@ -29,7 +29,7 @@ int main(void){
 //**********************************************************************
 // The following version tests input on PE0 and output on PE1
 //**********************************************************************
-  TExaS_Init(SW_PIN_PE0, LED_PIN_PE1);  // activate grader and set system clock to 80 MHz
+  TExaS_Init(SW_PIN_PE0, LED_PIN_PE1, ScopeOn);  // activate grader and set system clock to 80 MHz
   
 	
   EnableInterrupts();           // enable interrupts for the grader
