@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1456115227 source:/home/prasanna/git/C/hardway/ex19/main.c
+	<stdio.h>
+	<errno.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	"ex19.h"
+
+1456115091 /home/prasanna/git/C/hardway/ex19/ex19.h
+	"object.h"
+
+1456115151 /home/prasanna/git/C/hardway/ex19/object.h
+
