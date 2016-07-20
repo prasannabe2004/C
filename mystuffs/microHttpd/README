@@ -1,0 +1,7 @@
+Server:
+g++ main.c -lmicrohttpd -o server
+./server
+
+Client:
+echo -e GET http://localhost:8888 HTTP/1.0nn | nc localhost 8888
+
