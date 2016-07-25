@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <syslog.h>
+#include <pthread.h>
+
 
 #include <sys/types.h>
 #include <sys/select.h>
@@ -10,7 +13,7 @@
 
 static int shouldNotExit = 1;
 
-int answer_to_connection (void *cls, struct MHD_Connection *connection,
+int url_handler (void *cls, struct MHD_Connection *connection,
                           const char *url,
                           const char *method, const char *version,
                           const char *upload_data,
@@ -19,7 +22,10 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
   const char *page  = "<html><body>Hello, browser!</body></html>\n";
   struct MHD_Response *response;
   int ret;
-  printf("Got a request\n");
+  syslog(LOG_INFO, "Got a request\n");
+  syslog(LOG_INFO, "Method name is %s\n", method);
+  syslog(LOG_INFO, "Version is %s\n", version);
+
   response = MHD_create_response_from_buffer (strlen (page),
                                             (void*) page, MHD_RESPMEM_PERSISTENT);
   ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
@@ -40,7 +46,7 @@ void* http(void *arg)
 
     d = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG | MHD_USE_POLL,
                         *port,
-                        0, 0, &answer_to_connection, (void *)NULL, MHD_OPTION_END);
+                        0, 0, &url_handler, (void *)NULL, MHD_OPTION_END);
     if (d == 0){
         return 0;
     }
@@ -53,7 +59,7 @@ void* http(void *arg)
 
 int main (int argc, char *const *argv)
 {
-
+	syslog(LOG_INFO, "Starting micro HTTP server\n");
     if (argc != 2){
         printf ("%s PORT\n", argv[0]);
         exit(1);
