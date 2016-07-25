@@ -10,7 +10,7 @@ int main(void)
 
   curl = curl_easy_init();
   if(curl) {
-    curl_easy_setopt(curl, CURLOPT_URL, "http://www.example.com/");
+    curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:8787");
     res = curl_easy_perform(curl);
 
     if(CURLE_OK == res) {

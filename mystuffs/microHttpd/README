@@ -1,7 +1,9 @@
+Install:
+sudo apt-get install  libmicrohttpd-dev
+
 Server:
 g++ main.c -lmicrohttpd -o server
-./server
+./server 8888
 
 Client:
-echo -e GET http://localhost:8888 HTTP/1.0nn | nc localhost 8888
-
+echo -e "GET http://localhost:8888 HTTP/1.0\n\n\r" | nc localhost 8888
